@@ -93,5 +93,4 @@ import pandas as pd
 
 
 
-df = pd.read_excel("affan.xlsx")
 print(df.columns)
