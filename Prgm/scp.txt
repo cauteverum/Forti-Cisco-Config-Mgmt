@@ -1,0 +1,13 @@
+config router static
+edit 0
+set dst 10.10.100.0/24
+set gateway 192.168.0.1
+set device port1
+set comment Comment_one
+next
+edit 0
+set dst 10.10.90.0/24
+set gateway 192.168.0.1
+set device port1
+set comment Comment_two
+end
