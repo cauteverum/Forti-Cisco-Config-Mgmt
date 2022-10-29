@@ -82,15 +82,3 @@ import pandas as pd
 # connection = Netmiko(**dct)
 # res=connection.send_config_from_file("scp.txt")
 # print(res)
-
-
-
-
-
-
-
-
-
-
-
-print(df.columns)
