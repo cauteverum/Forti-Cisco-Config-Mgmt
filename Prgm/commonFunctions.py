@@ -1,4 +1,3 @@
-from doctest import OutputChecker
 import sqlite3
 from pandas import DataFrame
 from netmiko import Netmiko
