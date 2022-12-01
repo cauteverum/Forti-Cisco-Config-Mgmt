@@ -80,12 +80,3 @@ def this():
         if stop_thread: 
             break
 
-
-
-    # schedule.every(12).hours.do(this)
-    # while True: 
-    #     schedule.run_pending()
-    #     time.sleep(2)
-    #     if stop_thread: 
-    #         break
-
