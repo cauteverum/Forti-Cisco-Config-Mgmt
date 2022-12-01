@@ -2,6 +2,7 @@ import sqlite3
 from pandas import DataFrame
 from netmiko import Netmiko
 from getpass import getpass
+from time import sleep
 
 class Common: 
     def __init__(self,whoisMaster): 
@@ -11,6 +12,7 @@ class Common:
         self.master = whoisMaster
 
     def getSelectedDevices(self): 
+        sleep(1)
         if len(self.selected) > 0: 
             info = self.convertToDf(self.selected)
             print(f"$$$$$$$$$$       DEVICES YOU SELECTED       $$$$$$$$$$\n{info}")
@@ -18,10 +20,12 @@ class Common:
             print("Warning----> You didn't select any device yet. ")
 
     def shutDown(self): 
+        sleep(1)
         print(f"{self.master} connection is being closed...")
         self.connection.close()
 
     def convertToDf(self,devices=list): 
+        sleep(1)
         id, name, ip = [], [], []
         dct = {
             'id' : id,
@@ -42,24 +46,31 @@ class Common:
             return df
 
     def getAllDevices(self):
+        sleep(1)
         self.cursor.execute(f"select * from {self.master}")
         devices = self.cursor.fetchall()
         res = self.convertToDf(devices)
         print(f"{res} ")
 
     def clearSelected(self): 
+        sleep(1)
         self.selected.clear()
         print("Removed all devices from selected devices.")
 
 
     def selectAllDevices(self): 
-        self.cursor.execute(f"select * from {self.master}")
+        sleep(1)
+        if self.master == "scheduled": 
+            self.cursor.execute("select * from fortinet")
+        else:
+            self.cursor.execute(f"select * from {self.master}")
         devices = self.cursor.fetchall()
         self.selected.clear()
         self.selected = devices
         print("Selected all devices.")
 
     def selectDevices(self):
+            sleep(1)
             deviceIDs = ""
             try:
                 question_ = input("1-I want to see devices before selecting. \n2-Select device: \n-----> ")
@@ -86,6 +97,7 @@ class Common:
 
 
     def removeFromSelected(self): 
+        sleep(1)
         ids = input("Type ID of devices that you want to delete. This format should be like  (id1,id2,id3): ").split(",")
         for id in ids: 
             found_ = False
@@ -101,10 +113,17 @@ class Common:
 
 
     def getConfig(self): 
+        sleep(1)
         myList = []
         command_  = ""
-        uname = input("Username: ")
-        psw = input("Password: ")
+        uname = ""
+        psw = ""
+        if self.master == "scheduled": 
+            uname = "admin"
+            psw = "admin"
+        else: 
+            uname = input("Username: ")
+            psw = input("Password: ")
         dname = ""
         print(self.selected)
         for device  in self.selected: 
@@ -122,6 +141,8 @@ class Common:
                 command_ = "show full-configuration"
             elif self.master == "cisco": 
                 command_ = "show running config"
+            elif self.master == "scheduled": 
+                command_ = "show full-configuration"
             try:
                 nm = str(self.selected[i][1]) + ".txt"
                 dname = str(self.selected[i][1])
@@ -136,6 +157,7 @@ class Common:
 
 
     def sendCommand(self): 
+        sleep(1)
         myList = []
         uname = input("Username: ")
         psw = input("Password: ")     
@@ -162,6 +184,7 @@ class Common:
             print("Error.")
 
     def sendScript(self): 
+        sleep(1)
         myList = []
         uname = input("Username: ")
         psw = input("Password: ")
@@ -175,7 +198,8 @@ class Common:
                 'device_type' : 'fortinet'
             }
             myList.append(dct)
-        print(myList)
+        for i in myList: 
+            print(i["host"])
         try:
             for device in myList: 
                 deviceConnection = Netmiko(**device)
