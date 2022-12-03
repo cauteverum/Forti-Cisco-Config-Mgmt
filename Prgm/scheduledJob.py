@@ -17,12 +17,14 @@ def this():
         return devices
 
     def path(): 
-        if not os.path.exists("C:/users/oerkan/desktop/backupfordevices/fortinet"): 
-            os.makedirs("C:/users/oerkan/desktop/backupfordevices/fortinet")
-        if not os.path.exists("C:/users/oerkan/desktop/backupfordevices/cisco"): 
-            os.makedirs("C:/users/oerkan/desktop/backupfordevices/cisco")
+        user = os.getcwd().split("\\")[2]
+        if not os.path.exists(f"C:/users/{user}/desktop/backupfordevices/fortinet"): 
+            os.makedirs(f"C:/users/{user}/desktop/backupfordevices/fortinet")
+        if not os.path.exists(f"C:/users/{user}/desktop/backupfordevices/cisco"): 
+            os.makedirs(f"C:/users/{user}/desktop/backupfordevices/cisco")
 
     def doJob(devices=list): 
+        user = os.getcwd().split("\\")[2]
         for device in devices: 
             try: 
                 if device[3] == "fortinet":
@@ -37,10 +39,10 @@ def this():
                     res = connect.send_command("show full-configuration")
 
                     foldername = datetime.datetime.now().strftime("%Y-%m-%d")
-                    if not os.path.exists(f"C:/users/oerkan/desktop/backupfordevices/{dct['device_type']}/{foldername}"): 
-                        os.makedirs(f"C:/users/oerkan/desktop/backupfordevices/fortinet/{foldername}")
+                    if not os.path.exists(f"C:/users/{user}/desktop/backupfordevices/{dct['device_type']}/{foldername}"): 
+                        os.makedirs(f"C:/users/{user}/desktop/backupfordevices/fortinet/{foldername}")
 
-                    with open(file=f"C:/users/oerkan/desktop/backupfordevices/fortinet/{foldername}/{device[1] + '_' + datetime.datetime.now().strftime('%Y-%m-%d--%H-%M')}.cfg", mode="w",encoding="utf-8") as file: 
+                    with open(file=f"C:/users/{user}/desktop/backupfordevices/fortinet/{foldername}/{device[1] + '_' + datetime.datetime.now().strftime('%Y-%m-%d--%H-%M')}.cfg", mode="w",encoding="utf-8") as file: 
                         file.write(res)
 
                         
@@ -57,10 +59,10 @@ def this():
                     res = connect.send_command("show run")
                     foldername = datetime.datetime.now().strftime("%Y-%m-%d")
 
-                    if not os.path.exists(f"C:/users/oerkan/desktop/backupfordevices/cisco/{foldername}"): 
-                        os.makedirs(f"C:/users/oerkan/desktop/backupfordevices/cisco/{foldername}")
+                    if not os.path.exists(f"C:/users/{user}/desktop/backupfordevices/cisco/{foldername}"): 
+                        os.makedirs(f"C:/users/{user}/desktop/backupfordevices/cisco/{foldername}")
 
-                    with open(file=f"C:/users/oerkan/desktop/backupfordevices/cisco/{foldername}/{device[1] + '_' + datetime.datetime.now().strftime('%Y-%m-%d--%H-%M')}.cfg", mode="w",encoding="utf-8") as file: 
+                    with open(file=f"C:/users/{user}/desktop/backupfordevices/cisco/{foldername}/{device[1] + '_' + datetime.datetime.now().strftime('%Y-%m-%d--%H-%M')}.cfg", mode="w",encoding="utf-8") as file: 
                         file.write(res)
 
             except: 
